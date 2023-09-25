@@ -16,8 +16,8 @@
         <property name="format_sql">true</property>
         <!--        <property name="hibernate.hbm2ddl.auto">update</property>-->
 
-        <mapping class="com.fortech.entities.Person" />
-        <mapping class="com.fortech.entities.Car" />
+        <mapping class="com.practice.entities.Person" />
+        <mapping class="com.practice.entities.Product" />
 
     </session-factory>
 </hibernate-configuration>

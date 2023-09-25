@@ -18,8 +18,8 @@ public class Product {
     @Column(name = "bar_code")
     private String barCode;
 
-    @Column(name = "cnp_buyer")
-    private String cnpBuyer;
+//    @Column(name = "cnp_buyer")
+//    private String cnpBuyer;
 
     @Column(name = "product_name")
     private String productName;
