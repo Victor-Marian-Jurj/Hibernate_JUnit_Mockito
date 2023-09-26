@@ -3,10 +3,14 @@ package com.practice.dao;
 import com.practice.entities.Person;
 import com.practice.util.HibernateUtil;
 import jakarta.persistence.Query;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonDao {
@@ -49,5 +53,17 @@ public class PersonDao {
         query.setParameter("firstName", firstName);
         query.setParameter("lastName", lastName);
         return query.getResultList();
+    }
+
+    public List<Person> getAllHibernateStyle() {
+        try (Session session = HibernateUtil.getSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
+            Root<Person> personRoot = criteriaQuery.from(Person.class);
+            org.hibernate.query.Query<Person> query = session.createQuery((criteriaQuery));
+            return query.getResultList();
+        } catch (HibernateException exception) {
+            return new ArrayList<>();
+        }
     }
 }
