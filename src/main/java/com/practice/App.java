@@ -18,7 +18,9 @@ public class App
         PersonDao personDao = new PersonDao();
 
 //        personDao.add(person);
-        System.out.println(personDao.getAll());
+//        System.out.println(personDao.getAll());
+//        System.out.println(personDao.getByLastName("Stefan"));
+        System.out.println(personDao.getByFirstNameAndLastName("Vasile", "Eusebiu"));
 
     }
 }

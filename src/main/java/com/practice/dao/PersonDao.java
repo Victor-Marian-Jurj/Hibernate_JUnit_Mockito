@@ -36,4 +36,18 @@ public class PersonDao {
     }
 
 
+    public List<Person> getByLastName(String lastName) {
+        Session session = HibernateUtil.getSession();
+        Query query = session.createQuery("from Person as p where p.lastName = :lastName");
+        query.setParameter("lastName", lastName);
+        return query.getResultList();
+    }
+
+    public List<Person> getByFirstNameAndLastName(String firstName, String lastName) {
+        Session session = HibernateUtil.getSession();
+        Query query = session.createQuery("from Person as p where p.firstName = :firstName and p.lastName = :lastName");
+        query.setParameter("firstName", firstName);
+        query.setParameter("lastName", lastName);
+        return query.getResultList();
+    }
 }
