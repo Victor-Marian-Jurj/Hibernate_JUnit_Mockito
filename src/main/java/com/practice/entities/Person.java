@@ -33,7 +33,7 @@ public class Person {
 
     private String email;
 
-//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "person")
-//    @ToString.Exclude
-//    private List<Product> productList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
+    @ToString.Exclude
+    private List<Product> productList;
 }

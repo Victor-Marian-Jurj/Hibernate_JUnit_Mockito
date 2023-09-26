@@ -27,8 +27,8 @@ public class Product {
     @Column(name = "product_type")
     private String productType;
 
-    @Column(name = "quantity")
-    private int quantity;
+    @Column(name = "quatity")
+    private int quatity;
 
     private int price;
 
