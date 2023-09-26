@@ -17,7 +17,8 @@ public class App
 
         PersonDao personDao = new PersonDao();
 
-        personDao.add(person);
+//        personDao.add(person);
+        System.out.println(personDao.getAll());
 
     }
 }
