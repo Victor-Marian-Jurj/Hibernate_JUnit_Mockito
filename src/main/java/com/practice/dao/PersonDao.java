@@ -63,6 +63,19 @@ public class PersonDao {
             org.hibernate.query.Query<Person> query = session.createQuery((criteriaQuery));
             return query.getResultList();
         } catch (HibernateException exception) {
+            return null;
+        }
+    }
+
+    public List<Person> getByCnpHibernateStyle(String cnp) {
+        try(Session session = HibernateUtil.getSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
+            Root<Person> personRoot = criteriaQuery.from(Person.class);
+            criteriaQuery.select(personRoot).where(criteriaBuilder.like(personRoot.get("cnp"), cnp));
+            org.hibernate.query.Query<Person> query = session.createQuery(criteriaQuery);
+            return query.getResultList();
+        } catch(HibernateException exception){
             return new ArrayList<>();
         }
     }

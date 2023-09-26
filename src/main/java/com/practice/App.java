@@ -18,8 +18,8 @@ public class App {
 //        System.out.println(personDao.getAll());
 //        System.out.println(personDao.getByLastName("Stefan"));
 //        System.out.println(personDao.getByFirstNameAndLastName("Vasile", "Eusebiu"));
-          System.out.println(personDao.getAllHibernateStyle());
-
+//        System.out.println(personDao.getAllHibernateStyle());
+          System.out.println(personDao.getByCnpHibernateStyle("1111"));
 
     }
 }
