@@ -9,7 +9,7 @@ import com.practice.entities.Person;
 public class App {
     public static void main(String[] args) {
 
-        Person person = new Person("0505", "Adrian", "Cristoiu", "Str. Bucovat", "0744589985", "adi.cris@gmail.com");
+        Person person = new Person("0505", "Panait", "Valeriu", "Str. Banatului", "0744589985", "adi.cris@gmail.com");
 
 
         PersonDao personDao = new PersonDao();
@@ -19,7 +19,9 @@ public class App {
 //        System.out.println(personDao.getByLastName("Stefan"));
 //        System.out.println(personDao.getByFirstNameAndLastName("Vasile", "Eusebiu"));
 //        System.out.println(personDao.getAllHibernateStyle());
-          System.out.println(personDao.getByCnpHibernateStyle("1111"));
-
+//        System.out.println(personDao.getByCnpHibernateStyle("1111"));
+//        personDao.updatePerson("0505", person);
+//        personDao.updateAddress("0505", "Arhiepiscopiei");
+//        personDao.deletePerson("0505");
     }
 }

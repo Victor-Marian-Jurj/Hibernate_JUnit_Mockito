@@ -68,15 +68,55 @@ public class PersonDao {
     }
 
     public List<Person> getByCnpHibernateStyle(String cnp) {
-        try(Session session = HibernateUtil.getSession()) {
+        try (Session session = HibernateUtil.getSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
             Root<Person> personRoot = criteriaQuery.from(Person.class);
             criteriaQuery.select(personRoot).where(criteriaBuilder.like(personRoot.get("cnp"), cnp));
             org.hibernate.query.Query<Person> query = session.createQuery(criteriaQuery);
             return query.getResultList();
-        } catch(HibernateException exception){
+        } catch (HibernateException exception) {
             return new ArrayList<>();
         }
+    }
+
+    public boolean deletePerson(String cnp) {
+        try(Session session = HibernateUtil.getSession()) {
+            Transaction tx = session.beginTransaction();
+            Person p = session.find(Person.class, cnp);
+            session.remove(p);
+            tx.commit();
+        } catch(HibernateException exception){
+            return false;
+        }
+        return true;
+    }
+
+    public boolean updatePerson(String cnp, Person person) {
+        try (Session session = HibernateUtil.getSession()) {
+            Transaction tx = session.beginTransaction();
+            Person p = session.find(Person.class, cnp);
+            p.setAddress(person.getAddress());
+            p.setFirstName(person.getFirstName());
+            p.setLastName(person.getLastName());
+            session.merge(p);
+            tx.commit();
+        } catch (HibernateException exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean updateAddress(String cnp, String newAddress) {
+        try (Session session = HibernateUtil.getSession()) {
+            Transaction tx = session.beginTransaction();
+            Person p = session.find(Person.class, cnp);
+            p.setAddress(newAddress);
+            session.merge(p);
+            tx.commit();
+        } catch (HibernateException exception) {
+            return false;
+        }
+        return true;
     }
 }
