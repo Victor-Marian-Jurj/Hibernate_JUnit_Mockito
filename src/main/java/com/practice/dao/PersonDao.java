@@ -1,7 +1,6 @@
 package com.practice.dao;
 
 import com.practice.entities.Person;
-import com.practice.util.HibernateUtil;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -15,10 +14,19 @@ import java.util.List;
 
 
 public class PersonDao {
+    private final SessionProvider sessionProvider;
+
+    public PersonDao() {
+        sessionProvider = new HibernateUtilSessionProvider();
+    }
+
+    public PersonDao(SessionProvider sessionProvider) {
+        this.sessionProvider = sessionProvider;
+    }
 
     public void add(Person person) {
 
-        Session session = HibernateUtil.getSession();
+        Session session = sessionProvider.getSession();
         Transaction tx = session.beginTransaction();
         try {
             session.persist(person);
@@ -31,7 +39,7 @@ public class PersonDao {
     }
 
     public List<Person> getAll() {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionProvider.getSession();
         Query query = session.createQuery("from Person as p");
 //        query.setMaxResults(2); //fetch
 //        query.setFirstResult(3); //offset
@@ -42,14 +50,14 @@ public class PersonDao {
 
 
     public List<Person> getByLastName(String lastName) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionProvider.getSession();
         Query query = session.createQuery("from Person as p where p.lastName = :lastName");
         query.setParameter("lastName", lastName);
         return query.getResultList();
     }
 
     public List<Person> getByFirstNameAndLastName(String firstName, String lastName) {
-        Session session = HibernateUtil.getSession();
+        Session session = sessionProvider.getSession();
         Query query = session.createQuery("from Person as p where p.firstName = :firstName and p.lastName = :lastName");
         query.setParameter("firstName", firstName);
         query.setParameter("lastName", lastName);
@@ -57,7 +65,7 @@ public class PersonDao {
     }
 
     public List<Person> getAllHibernateStyle() {
-        try (Session session = HibernateUtil.getSession()) {
+        try (Session session = sessionProvider.getSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
             Root<Person> personRoot = criteriaQuery.from(Person.class);
@@ -69,7 +77,7 @@ public class PersonDao {
     }
 
     public List<Person> getByCnpHibernateStyle(String cnp) {
-        try (Session session = HibernateUtil.getSession()) {
+        try (Session session = sessionProvider.getSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
             Root<Person> personRoot = criteriaQuery.from(Person.class);
@@ -82,7 +90,7 @@ public class PersonDao {
     }
 
     public boolean deletePerson(String cnp) {
-        try(Session session = HibernateUtil.getSession()) {
+        try(Session session = sessionProvider.getSession()) {
             Transaction tx = session.beginTransaction();
             Person p = session.find(Person.class, cnp);
             session.remove(p);
@@ -94,7 +102,7 @@ public class PersonDao {
     }
 
     public boolean updatePerson(String cnp, Person person) {
-        try (Session session = HibernateUtil.getSession()) {
+        try (Session session = sessionProvider.getSession()) {
             Transaction tx = session.beginTransaction();
             Person p = session.find(Person.class, cnp);
             p.setAddress(person.getAddress());
@@ -109,7 +117,7 @@ public class PersonDao {
     }
 
     public boolean updateAddress(String cnp, String newAddress) {
-        try (Session session = HibernateUtil.getSession()) {
+        try (Session session = sessionProvider.getSession()) {
             Transaction tx = session.beginTransaction();
             Person p = session.find(Person.class, cnp);
             p.setAddress(newAddress);
