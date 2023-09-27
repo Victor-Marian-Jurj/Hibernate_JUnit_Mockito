@@ -6,12 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,44 +15,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 public class PersonDaoTest {
-    @InjectMocks
+
     private PersonDao personDao;
-    @Mock
     private Session session;
-    @Mock
     private Transaction transaction;
 
-    @BeforeAll
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         personDao = new PersonDao();
         session = mock(Session.class);
         transaction = mock(Transaction.class);
 
-        when(session.beginTransaction()).thenReturn(transaction);
-
-        Mockito mockito = null;
-        mockito.mockStatic(HibernateUtil.class);
+        mockStatic(HibernateUtil.class);
         when(HibernateUtil.getSession()).thenReturn(session);
+        when(session.beginTransaction()).thenReturn(transaction);
     }
-//    @AfterEach
-//    void tearDown() {
-//        Mockito.reset(HibernateUtil.class);
-//    }
 
     @Test
-    public void testAddPerson() {
-
+    void testAddPerson() {
         Person person = new Person();
         person.setFirstName("John");
         person.setLastName("Doe");
 
-        doNothing().when(session).persist(person);
         personDao.add(person);
 
         verify(session).persist(person);
         verify(transaction).commit();
+        verify(session).close();
     }
 
 
