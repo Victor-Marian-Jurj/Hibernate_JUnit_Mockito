@@ -5,9 +5,9 @@ import com.practice.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,17 +19,19 @@ import static org.mockito.Mockito.*;
 public class PersonDaoTest {
 
     private PersonDao personDao;
+    private SessionProvider sessionProvider;
     private Session session;
     private Transaction transaction;
 
     @BeforeEach
     void setUp() {
-        personDao = new PersonDao();
+        sessionProvider = mock(SessionProvider.class);
         session = mock(Session.class);
         transaction = mock(Transaction.class);
 
-        mockStatic(HibernateUtil.class);
-        when(HibernateUtil.getSession()).thenReturn(session);
+        personDao = new PersonDao(sessionProvider);
+
+        when(sessionProvider.getSession()).thenReturn(session);
         when(session.beginTransaction()).thenReturn(transaction);
     }
 
